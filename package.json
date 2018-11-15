@@ -1,0 +1,40 @@
+{
+  "name": "testing-hapi",
+  "version": "2.0.0",
+  "description": "Example hapi-backed API serivce with testing and CI.",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js",
+    "test": "NODE_ENV=test node node_modules/lab/bin/lab -v -L -C -c -t 85",
+    "test-cov-html": "lab -r html -o coverage.html"
+  },
+  "keywords": [
+    "hapi",
+    "hapi-v17",
+    "tests",
+    "lab",
+    "ci",
+    "travisci"
+  ],
+  "author": "Jinhwan Lee",
+  "license": "ISC",
+  "dependencies": {
+    "boom": "^7.1.1",
+    "dotenv": "^6.1.0",
+    "hapi": "^17.2.0",
+    "hapi-auth-jwt2": "^8.1.0",
+    "hapi-swagger": "^9.1.1",
+    "inert": "^5.1.0",
+    "joi": "^13.1.2",
+    "moment": "^2.22.2",
+    "mongoose": "^5.3.11",
+    "promise": "^8.0.1",
+    "vision": "^5.3.1"
+  },
+  "devDependencies": {
+    "code": "^5.2.0",
+    "eslint-config-hapi": "^11.1.0",
+    "eslint-plugin-hapi": "^4.1.0",
+    "lab": "^15.2.2"
+  }
+}
