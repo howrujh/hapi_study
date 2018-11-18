@@ -13,7 +13,7 @@ routes.push({
     method: 'GET',
     path: API_BASE_PATH,
     config: {
-        // auth: false,
+        auth: false,
         handler: Handlers.handlers.get,
         description: 'get products',
         notes: 'This endpoint allows for the retrieval of products.',
@@ -46,7 +46,7 @@ routes.push({
     method: 'GET',
     path: API_BASE_PATH + '/{id}',
     config: {
-        // auth: false,
+        auth: false,
         handler: Handlers.handlers.get,
         description: 'get product by id',
         notes: 'This endpoint allows for the retrieval of products.',

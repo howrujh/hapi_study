@@ -15,13 +15,13 @@ const docSchema = mongoose.Schema({
     title: String,
     description: String,
     ok: Boolean,
-    time: Date,
+    time: Date
 });
 
-const User = mongoose.model("User", userSchema, 'users');
-const Doc = mongoose.model("Doc", docSchema, 'docs');
+const User = mongoose.model('User', userSchema, 'users');
+const Doc = mongoose.model('Doc', docSchema, 'docs');
 
 module.exports = {
     User,
     Doc
-}
+};

@@ -38,7 +38,7 @@ routes.push({
             payload: {
                 title: Joi.string().required(), 
                 description: Joi.string().required(), 
-                ok: Joi.boolean().required(), 
+                ok: Joi.boolean().required()
             }
         },
         response: {
@@ -113,7 +113,7 @@ routes.push({
                 title: Joi.string(), 
                 author: Joi.string(), 
                 description: Joi.string(), 
-                ok: Joi.boolean(), 
+                ok: Joi.boolean()
             }
         },
         response: {

@@ -9,6 +9,7 @@ const lab         = exports.lab = Lab.script();
 // use some BDD verbage instead of lab default
 const describe    = lab.describe;
 const it          = lab.it;
+const before = lab.before;
 const after       = lab.after;
 
 // require hapi server
@@ -66,6 +67,16 @@ describe('functional tests - products', () => {
 
 describe('functional tests - get documentation', () => {
 
+    before(() => {
+
+        return new Promise((resolve) => {
+
+            setTimeout(() => {
+                resolve();
+            }, 1000);
+        });
+    });
+
     it('should return documentation html', async () => {
 
         // make API call to self to test functionality end-to-end
@@ -73,6 +84,7 @@ describe('functional tests - get documentation', () => {
             method: 'GET',
             url: '/'
         });
+
 
         expect(response.statusCode).to.equal(200);
         expect(response.result).to.be.a.string();

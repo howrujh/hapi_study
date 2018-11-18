@@ -3,138 +3,167 @@
 const Models = require('./models');
 const mongoose = require('mongoose');
 
-const GetTimeFromObjectId = (id) => {
+const GetTimeFromObjectId = ( id ) => {
+
     try {
-        const time =mongoose.Types.ObjectId(id).getTimestamp().getTime()/1000;
+        const time = mongoose.Types.ObjectId(id).getTimestamp().getTime() / 1000;
         return time;
-    } catch(e) {
+    } catch (e) {
         console.log(e);
         return -1;
     }
-}
+};
 
-const GetHexStringFromObjectId =(id) => {
+const GetHexStringFromObjectId = ( id ) => {
+
     try {
-        const hexStrId =mongoose.Types.ObjectId(id).toHexString();
+        const hexStrId = mongoose.Types.ObjectId(id).toHexString();
         return hexStrId;
-    } catch(e) {
+    } catch (e) {
         console.log(e);
-        return "";
+        return '';
     }
-}
+};
 
-const FindDocs= (offset, take) => {
+const FindDocs = (offset, take) => {
+
     return new Promise((resolve, reject) => {
+
         Models.Doc.find({ }).skip(offset).limit(take).exec((err, docs) => {
-            if(err) {
+
+            if (err) {
                 reject(err);
             }
             resolve(docs);
-        })
-    })
-}
-const DeleteDoc= (id) => {
+        });
+    });
+};
+
+const DeleteDoc = (id) => {
+
     return new Promise((resolve, reject) => {
+
         const _id = mongoose.Types.ObjectId(id);
 
-        console.log('---------delete doc------')
-        Models.Doc.findOneAndDelete({ _id}, (err) => {
-            if(err) {
+        console.log('---------delete doc------');
+        Models.Doc.findOneAndDelete({ _id }, (err) => {
+
+            if (err) {
                 reject(err);
             }
             resolve();
-        })
-    })
-}
+        });
+    });
+};
 
 const CreateDoc = (title, author,desc, ok) => {
+
     return new Promise((resolve, reject) => {
 
-        var obj = {
+        const obj = {
             title,
             author,
             description: desc,
             ok
         };
 
-        var doc = new Models.Doc(obj);
-        
+        const doc = new Models.Doc(obj);
+
         doc.save((err, d) => {
-           if (err) {
+
+            if (err) {
                 reject(err);
             }
-            resolve(d)
+            resolve(d);
         });
-    })
-}
-const UpdateDoc = (id, title, author, description, ok ) => {
-    let obj = {};
-    if(title) {
-        obj['title'] = title;
+    });
+};
+
+const UpdateDoc = (id, title, author, description, ok) => {
+
+    const obj = {};
+    if (title) {
+        // obj['title'] = title;
+        obj.title = title;
     }
-    if(author) {
-        obj['author'] = author;
+    if (author) {
+        // obj['author'] = author;
+        obj.author = author;
     }
-    if(description) {
-        obj['description'] = description;
+    if (description) {
+        // obj['description'] = description;
+        obj.description = description;
     }
-    if(ok) {
-        obj['ok'] = ok;
+    if (ok) {
+        // obj['ok'] = ok;
+        obj.ok = ok;
     }
+
     const _id = mongoose.Types.ObjectId(id);
     console.log(`id: ${id}, _id: ${_id}, doc: ${obj}`);
     console.log(obj);
+
     return new Promise((resolve, reject) => {
-        Models.Doc.findOneAndUpdate({_id}, {$set: obj }, (err, u) => {
-            if(err) {
+
+        Models.Doc.findOneAndUpdate({ _id }, { $set: obj }, (err, u) => {
+
+            if (err) {
                 reject(err);
             }
             resolve(u);
-        })
-    })
-}
+        });
+    });
+};
 
 const FindUserByEmail = (email) => {
+
     return new Promise((resolve, reject) => {
-        Models.User.findOne({ email: email }, (err, u) => {
-            if(err) {
+
+        Models.User.findOne({ email }, (err, u) => {
+
+            if (err) {
                 reject(err);
             }
             resolve(u);
-        })
-    })
-}
+        });
+    });
+};
 
 const UpdateUserToken = (email, token) => {
+
     return new Promise((resolve, reject) => {
-        Models.User.findOneAndUpdate({email:email}, {$set: { jwt: token } }, (err, u) => {
-            if(err) {
+
+        Models.User.findOneAndUpdate({ email }, { $set: { jwt: token } }, (err, u) => {
+
+            if (err) {
                 reject(err);
             }
             resolve(u);
-        })
-    })
-}
+        });
+    });
+};
 
 const CreateUser = (email, pass, name, jwt) => {
+
     return new Promise((resolve, reject) => {
 
-        var obj = {
+        const obj = {
             email,
             pass,
             jwt,
             name
         };
 
-        var user = new Models.User(obj);
+        const user = new Models.User(obj);
         user.save((err) => {
+
             if (err) {
                 reject(err);
             }
-            resolve()
+            resolve();
         });
-    })
-}
+    });
+};
 
 
 
@@ -148,4 +177,4 @@ module.exports = {
     FindUserByEmail,
     UpdateUserToken,
     CreateUser
-}
+};

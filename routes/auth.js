@@ -16,7 +16,7 @@ const routes = [];
 // POST /auth/create
 routes.push({
     method: 'POST',
-    path: API_BASE_PATH+'/create',
+    path: API_BASE_PATH + '/create',
     options: {
         auth: false,
         handler: Handlers.PostAuthCreate,
@@ -48,7 +48,7 @@ routes.push({
 
 routes.push({
     method: 'POST',
-    path: API_BASE_PATH+'/login',
+    path: API_BASE_PATH + '/login',
     options: {
         auth: false,
         handler: Handlers.PostAuthLogin,
@@ -82,7 +82,7 @@ routes.push({
 
 routes.push({
     method: 'GET',
-    path: API_BASE_PATH+'/logout',
+    path: API_BASE_PATH + '/logout',
     options: {
         handler: Handlers.GetAuthLogout,
         description: 'user logout',
@@ -112,7 +112,7 @@ routes.push({
 
 routes.push({
     method: 'GET',
-    path: API_BASE_PATH+'/info',
+    path: API_BASE_PATH + '/info',
     options: {
         handler: Handlers.GetAuthInfo,
         description: 'get user infomatjion',

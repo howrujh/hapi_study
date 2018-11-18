@@ -10,11 +10,16 @@ const Pack        = require('./package.json');
 const Fs          = require('fs');
 const _           = require('lodash');
 
+const { ApolloServer } = require('apollo-server-hapi');
+// const { makeExecutableSchema } = require('graphql-tools');
 
 const AuthJwt2    = require('hapi-auth-jwt2');
 const mongoose = require('mongoose');
 
 const AuthHandler = require('./handlers/auth');
+
+const resolvers = require('./graphql/resolvers');
+const typeDefs = require('./graphql/qlschema');
 
 // const people = { // our "users database"
 //     1: {
@@ -35,8 +40,13 @@ const AuthHandler = require('./handlers/auth');
 //     }
 // };
 
-const server = new Hapi.Server({
-    host: process.env.API_HOST ||'0.0.0.0',
+
+// const schema = makeExecutableSchema({ typeDefs, resolvers });
+
+const server = new ApolloServer({typeDefs, resolvers});
+
+const app = new Hapi.Server({
+    host: process.env.API_HOST || '0.0.0.0',
     port: process.env.API_PORT || 28080
 });
 
@@ -66,28 +76,29 @@ const server = new Hapi.Server({
     };
 
     /* register plugins */
-    await server.register([
+    await app.register([
         Inert,
         Vision,
         AuthJwt2,
         HapiSwaggerConfig
     ]);
 
-    server.auth.strategy('jwt', 'jwt',
-    { key: process.env.JWT_SECRET,          // Never Share your secret key
-      validate: AuthHandler.Validate,            // validate function defined above
-      verifyOptions: { algorithms: [ 'HS256' ] }, // pick a strong algorithm
-      headerKey: 'access-token'
-    });
+    app.auth.strategy('jwt', 'jwt',
+        {
+            key: process.env.JWT_SECRET,          // Never Share your secret key
+            validate: AuthHandler.Validate,            // validate function defined above
+            verifyOptions: { algorithms: ['HS256'] }, // pick a strong algorithm
+            headerKey: 'access-token'
+        });
 
-    server.auth.default('jwt');
+    app.auth.default('jwt');
 
     // require routes
     Fs.readdirSync('routes').forEach((file) => {
 
         _.each(require('./routes/' + file), (routes) => {
 
-            server.route(routes);
+            app.route(routes);
         });
     });
 
@@ -96,17 +107,28 @@ const server = new Hapi.Server({
         pass: process.env.DB_PASS
 
     });
-    var db = mongoose.connection;
+
+    const db = mongoose.connection;
     db.on('error', console.error.bind(console, 'connection error:'));
     db.once('open', async () => {
 
+        await server.applyMiddleware({
+            app,
+            path: '/graphql',
+            route: {
+                auth: false
+            }
+        });
+
+        await server.installSubscriptionHandlers(app.listener);
+
         // we're connected!
         console.log('mongo db connected');
-        await server.start();
-        console.log('Server running at:', server.info.uri);
+        await app.start();
+        console.log('Server running at:', app.info.uri);
 
     });
 
 })();
 
-module.exports = server;
+module.exports = app;

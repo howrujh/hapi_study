@@ -1,22 +1,20 @@
 'use strict';
 
 const Boom = require('boom');
-const JWT = require('jsonwebtoken');
-const moment = require('moment');
 const DB = require('../db/db');
 
-const DEV_SECRET = 'DEV_SECRET';
-const crypto = require('crypto');
 const Util = require('../lib/utils');
 
 const GetDocs = async (request, h) => {
+
     try {
-        const offset= Util.isValid(request.query.offset, 0);
-        const take= Util.isValid(request.query.take, 5);
+        const offset = Util.isValid(request.query.offset, 0);
+        const take = Util.isValid(request.query.take, 5);
 
 
         const dbDocs = await DB.FindDocs(offset, take);
         const docs = dbDocs.map((d) => {
+
             const time = DB.GetTimeFromObjectId(d._id);
             const id = DB.GetHexStringFromObjectId(d._id);
 
@@ -27,8 +25,8 @@ const GetDocs = async (request, h) => {
                 description: d.description,
                 ok: d.ok,
                 time
-            }
-        })
+            };
+        });
 
         const data = {
             data: docs
@@ -41,11 +39,11 @@ const GetDocs = async (request, h) => {
     } catch (e) {
         console.log(e);
         return Boom.serverUnavailable();
-
     }
-}
+};
 
-const PutDocUpdate= async (request, h) => {
+const PutDocUpdate = async (request, h) => {
+
     try {
         const title = request.payload.title;
         const author = request.payload.author;
@@ -53,8 +51,8 @@ const PutDocUpdate= async (request, h) => {
         const ok = request.payload.ok;
         const id = request.params.id;
 
-        const doc = await DB.UpdateDoc(id, title, author, description, ok );
-        if(doc === null) {
+        const doc = await DB.UpdateDoc(id, title, author, description, ok);
+        if (doc === null) {
             return Boom.badRequest();
         }
         const time = DB.GetTimeFromObjectId(doc._id);
@@ -79,15 +77,16 @@ const PutDocUpdate= async (request, h) => {
         return Boom.serverUnavailable();
 
     }
-}
+};
 
 const DeleteDoc = async (request, h) => {
+
     try {
         const id = request.payload.id;
 
         await DB.DeleteDoc(id);
 
-        console.log('----------delete success ---')
+        console.log('----------delete success ---');
 
         return 'success';
 
@@ -96,16 +95,17 @@ const DeleteDoc = async (request, h) => {
         return Boom.serverUnavailable();
 
     }
-}
+};
 
 const PostDocCreate = async (request, h) => {
+
     try {
         const title = request.payload.title;
         const description = request.payload.description;
         const ok = request.payload.ok;
-        const author = request.payload.author? request.payload.author: 'unknown';
+        const author = request.payload.author ? request.payload.author : 'unknown';
 
-        const doc = await DB.CreateDoc(title, author, description, ok );
+        const doc = await DB.CreateDoc(title, author, description, ok);
         const time = DB.GetTimeFromObjectId(doc._id);
         const id = DB.GetHexStringFromObjectId(doc._id);
 
@@ -130,7 +130,7 @@ const PostDocCreate = async (request, h) => {
         return Boom.serverUnavailable();
 
     }
-}
+};
 
 
 
@@ -139,4 +139,4 @@ module.exports = {
     PutDocUpdate,
     DeleteDoc,
     GetDocs
-}
+};

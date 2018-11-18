@@ -19,8 +19,11 @@
   "author": "Jinhwan Lee",
   "license": "ISC",
   "dependencies": {
+    "apollo-server-hapi": "^2.2.2",
     "boom": "^7.1.1",
     "dotenv": "^6.1.0",
+    "graphql": "^14.0.2",
+    "graphql-tools": "^4.0.3",
     "hapi": "^17.2.0",
     "hapi-auth-jwt2": "^8.1.0",
     "hapi-swagger": "^9.1.1",
